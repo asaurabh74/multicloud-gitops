@@ -9,28 +9,30 @@ clusterGroup:
   isHubCluster: false
 
   namespaces:
+    - multicloud-gitops-region-one
+    - ansible-automation-platform
     - config-demo
 
   subscriptions:
+    - name: ansible-automation-platform-operator
+      namespace: ansible-automation-platform
+      channel: stable-2.1
+      csv: aap-operator.v2.1.0-0.1639138915
+
 
   projects:
+    - ansible-automation-platform
     - config-demo
 
   applications:
-    config-demo:
-      name: config-demo
+    - name: ansible
+      project: ansible-automation-platform
+      path: region/aap
+      
+    - name: config-demo
       namespace: config-demo
       project: config-demo
       path: charts/all/config-demo
-
-
-  imperative:
-    # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
-    jobs:
-    - name: get-hub
-      playbook: ansible/playbooks/on-regional-get-hub-ca.yml
-      timeout: 123
-
 
 
 #  To have apps in multiple flavors, use namespaces and use helm overrides as appropriate
